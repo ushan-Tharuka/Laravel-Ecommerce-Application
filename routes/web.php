@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthManager;
 use App\Http\Controllers\ProductsManager;
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -35,3 +36,13 @@ Route::post("register", [AuthManager::class , "registerPost"])
 
 Route::get('/product/{slug}', [ProductsManager::class, 'details'])
     ->name('products.details');
+
+Route::middleware("auth")->group(function () {
+    Route::get('/cart/{id}', [ProductsManager::class, 'addToCart'])
+        ->name('cart.add');
+});
+
+Route::get('/cart', [ProductsManager::class, 'showCart'])
+    ->name('cart.show');
+
+
