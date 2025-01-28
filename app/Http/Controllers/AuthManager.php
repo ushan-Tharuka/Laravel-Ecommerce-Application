@@ -27,6 +27,11 @@ class AuthManager extends Controller
         return redirect('login')
             ->with('error', 'Invalid Credentials');
     }
+    function Logout()
+    {
+        Auth::logout();
+        return redirect('login');
+    }
 
     function register(){
         return view('auth.register');

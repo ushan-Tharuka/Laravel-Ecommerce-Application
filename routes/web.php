@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthManager;
+use App\Http\Controllers\ProductsManager;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,12 +15,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::get('/', [ProductsManager::class, 'index'])->name('home');
+
 
 Route::get("login", [AuthManager::class , "login"])
     ->name('login');
+
+Route::get("logout", [AuthManager::class , "logout"])
+    ->name('logout');
 
 Route::post("login", [AuthManager::class , "loginPost"])
     ->name('login.post');
@@ -29,3 +32,6 @@ Route::get("register", [AuthManager::class , "register"])
 
 Route::post("register", [AuthManager::class , "registerPost"])
     ->name('register.post');
+
+Route::get('/product/{slug}', [ProductsManager::class, 'details'])
+    ->name('products.details');
