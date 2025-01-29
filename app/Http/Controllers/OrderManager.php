@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Orders;
+use App\Models\Products;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Stripe\Exception\SignatureVerificationException;
@@ -144,13 +145,41 @@ class OrderManager extends Controller
             if ($order) {
                 // Update the order's payment ID and status to 'completed'
                 $order->payment_id = $paymentId;
-                $order->status = 'completed';
+                $order->status = 'payment_completed';
                 $order->save();
             }
         }
 
         // Return a success response
         return response()->json(['status' => 'success']);
+    }
+
+    function orderHistory(){
+
+        $orders = Orders::where("user_id", auth()->user()->id)->orderBy('id', "DESC")
+            ->paginate(5);
+
+        $orders->getCollection()->transform(function ($order) {
+            $productIds = json_decode($order->product_id, associative: true);
+            $quantities = json_decode($order->quantity, associative: true);
+
+            $products = Products::whereIn('id', $productIds)->get();
+
+            $order->product_details = $products->map(function ($product) use ($quantities, $productIds) {
+                $index = array_search($product->id, $productIds);
+                return [
+                    'name' => $product->title,
+                    'quantity' => $quantities[$index] ?? 0,
+                    'price' => $product->price,
+                    'slug' => $product->slug,
+                    'image' => $product->image,
+                ];
+            });
+
+            return $order;
+        });
+        return view("history", compact("orders"));
+
     }
 
 

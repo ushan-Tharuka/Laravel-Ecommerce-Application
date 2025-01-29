@@ -57,3 +57,6 @@ Route::get('/payment/success/{order_id}', [OrderManager::class, 'paymentSuccess'
 
 Route::get('/payment/error', [OrderManager::class, 'paymentError'])
     ->name('payment.error');
+
+Route::get('/order/history', [OrderManager::class, 'orderHistory'])
+    ->name('order.history');
