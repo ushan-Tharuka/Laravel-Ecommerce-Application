@@ -21,6 +21,10 @@ class Kernel extends ConsoleKernel
     protected function commands(): void
     {
         $this->load(__DIR__.'/Commands');
+        // If your custom command exists, register it here explicitly
+//        $this->commands([
+//            \App\Console\Commands\InstallApi::class,
+//        ]);
 
         require base_path('routes/console.php');
     }

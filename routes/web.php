@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthManager;
+use App\Http\Controllers\OrderManager;
 use App\Http\Controllers\ProductsManager;
 use Illuminate\Support\Facades\Route;
 
@@ -45,4 +46,14 @@ Route::middleware("auth")->group(function () {
 Route::get('/cart', [ProductsManager::class, 'showCart'])
     ->name('cart.show');
 
+Route::get('/checkout', [OrderManager::class, 'showCheckout'])
+    ->name('checkout.show');
 
+Route::post('/checkout', [OrderManager::class, 'checkoutPost'])
+    ->name('checkout.post');
+
+Route::get('/payment/success/{order_id}', [OrderManager::class, 'paymentSuccess'])
+    ->name('payment.success');
+
+Route::get('/payment/error', [OrderManager::class, 'paymentError'])
+    ->name('payment.error');

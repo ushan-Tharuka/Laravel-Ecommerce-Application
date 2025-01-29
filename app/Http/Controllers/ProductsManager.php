@@ -39,10 +39,22 @@ class ProductsManager extends Controller
     function showCart()
     {
         $cartItems = DB::table('cart')
-            ->join('products', 'products.id', '=', 'products.id')
-            ->select('cart.product_id', DB::raw('count(*) as quantity'),'products.title','products.slug','products.price','products.image')
+            ->join('products', 'cart.product_id', '=', 'products.id')
+            ->select('cart.product_id', DB::raw('count(*) as quantity'),
+                'products.title',
+                'products.price',
+                'products.image',
+                'products.slug'
+            )
             ->where('cart.user_id', auth()->user()->id)
-            ->groupBy('cart.product_id','products.title','products.slug','products.price','products.image','products.slug')
+            ->groupBy('cart.product_id',
+                'products.title',
+                'products.price',
+                'products.image',
+                'products.slug'
+
+
+            )
             ->paginate(5);
 
         return view('cart', compact('cartItems'));
