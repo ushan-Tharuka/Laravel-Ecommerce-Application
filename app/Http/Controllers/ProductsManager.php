@@ -40,7 +40,10 @@ class ProductsManager extends Controller
     {
         $cartItems = DB::table('cart')
             ->join('products', 'cart.product_id', '=', 'products.id')
-            ->select('cart.product_id', DB::raw('count(*) as quantity'),
+
+            ->select('cart.product_id',
+                DB::raw('MIN(cart.id) as cart_id'),
+                DB::raw('count(*) as quantity'),
                 'products.title',
                 'products.price',
                 'products.image',
@@ -58,6 +61,13 @@ class ProductsManager extends Controller
             ->paginate(5);
 
         return view('cart', compact('cartItems'));
+    }
+
+    function deleteCartItem($id)
+    {
+        Cart::where('user_id',auth()->user()->id)
+            ->where('id',$id)->delete();
+        return redirect()->back()->with('success', 'Product remove from cart successfully!');
     }
 
 

@@ -46,6 +46,9 @@ Route::middleware("auth")->group(function () {
 Route::get('/cart', [ProductsManager::class, 'showCart'])
     ->name('cart.show');
 
+Route::get('/cart/delete/{id}', [ProductsManager::class, 'deleteCartItem'])
+    ->name('cart.delete');
+
 Route::get('/checkout', [OrderManager::class, 'showCheckout'])
     ->name('checkout.show');
 
